@@ -1,10 +1,12 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const cors = require("cors");
+import express from "express";
+import dotenv from "dotenv";
+import helmet from "helmet";
+import morgan from "morgan";
+import cors from "cors";
+import connectDB from "./config/db.js";
+
 dotenv.config();
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,12 +23,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/test", (req, res) => {
-  res.json({ message: "API endpoint working!" });
+  res.json({ message: "API endpoint working! tgefsnfsn" });
 });
 
 app.listen(PORT, (error) => {
   if (!error) {
-    console.log(`🚀 Server running on port http://localhost:${PORT}`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
   } else {
     console.log("Error occurred, server can't start", error);
   }
