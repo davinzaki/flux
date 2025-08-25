@@ -18,13 +18,14 @@ This project is perfect as a starting point for learning full-stack development,
 ---
 
 ## 📂 Project Structure
-
+```bash
 Flux/
-├─ client/ # React + Vite frontend
-├─ server/ # Express backend with MongoDB
-├─ shared/ # Shared types, validation, utils
-├─ docs/ # Documentation
-├─ package.json # Root workspace config
+├─ client/       # React + Vite frontend
+├─ server/       # Express backend with MongoDB
+├─ shared/       # Shared types, validation, utils
+├─ docs/         # Documentation
+├─ package.json  # Root workspace config
+```
 
 ---
 
@@ -49,20 +50,24 @@ Clone the repository:
 git clone https://github.com/davinzaki/flux.git
 
 cd flux
+```
 
 Install dependencies for root, client, and server:
-
+```bash
 npm run install-deps
+```
 
 Run in development mode
-
+```bash
 npm run dev
+```
 
 Build client for production
-
+```bash
 npm run build
+```
 
 Preview production build
-
+```bash
 npm run preview
 ```
