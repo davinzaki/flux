@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -25,6 +26,9 @@ app.get("/", (req, res) => {
 app.get("/api/test", (req, res) => {
   res.json({ message: "API endpoint working! tgefsnfsn" });
 });
+
+// Routes
+app.use("/api/categories", categoryRoutes);
 
 app.listen(PORT, (error) => {
   if (!error) {
