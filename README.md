@@ -71,3 +71,53 @@ Preview production build
 ```bash
 npm run preview
 ```
+
+## 🐳 Running with Docker
+
+Flux comes with a ready-to-use **Docker setup** for local development.  
+This will spin up **3 containers**:
+- `client` → React + Vite frontend
+- `server` → Express backend
+- `mongo` → MongoDB database
+
+### 1️⃣ Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+- A `.env` file at the project root (already included in `.env.example`)
+
+Example `.env`:
+```env
+# App environment
+NODE_ENV=development
+
+# Ports
+CLIENT_PORT=5173
+SERVER_PORT=5000
+MONGO_PORT=27017
+
+# Database
+MONGO_URI=mongodb://mongo:27017/fluxdb
+```
+
+### 2️⃣ Build & Run Containers
+
+From the root of the project:
+```bash
+docker compose up --build
+```
+
+### 3️⃣ Stopping & Cleaning
+
+To stop:
+```bash
+docker compose down
+```
+
+If you want to reset MongoDB data (useful if you see the unclean shutdown warning):
+
+```bash
+docker compose down -v
+```
+
+(-v removes volumes, wiping the database)
+
+✅ With this setup, you don’t need Node, Mongo, or Vite installed locally—just Docker.
