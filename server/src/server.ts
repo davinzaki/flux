@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { ApiResponse } from "./types";
 
+import categoryRouter from "./routes/categoryRoutes";
+
 // Load environment variables
 dotenv.config();
 
@@ -34,7 +36,7 @@ const connectDB = async (): Promise<void> => {
 app.get("/", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
+    message: "Flux API is running!",
     data: { timestamp: new Date().toISOString() },
   });
 });
@@ -42,10 +44,12 @@ app.get("/", (req: Request, res: Response<ApiResponse>) => {
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
+    message: "API endpoint is working!",
     data: { timestamp: new Date().toISOString() },
   });
 });
+
+app.use("/api/categories", categoryRouter);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

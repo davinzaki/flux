@@ -13,6 +13,7 @@ export const getCategories = async (req: Request, res: Response) => {
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const category = new Category({ ...req.body });
+    console.log("category", category);
     await category.save();
     res.status(201).json(category);
   } catch (error) {
