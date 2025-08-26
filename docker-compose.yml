@@ -18,9 +18,17 @@ services:
       - PORT=${SERVER_PORT}
     depends_on:
       - mongo
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - .git/
+        - action: rebuild
+          path: ./server/package.json
 
   client:
     build: ./client
@@ -32,9 +40,17 @@ services:
       - VITE_API_URL=http://localhost:${SERVER_PORT}
     depends_on:
       - server
-    volumes:
-      - ./client:/app
-      - /app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - .git/
+        - action: rebuild
+          path: ./client/package.json
 
 volumes:
   mongo-data:
