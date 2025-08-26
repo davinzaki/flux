@@ -17,7 +17,8 @@ export const getCategories = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
-    const slug = generateSlug(req.body.name);
+    const { name } = req.body;
+    const slug = generateSlug(name);
     const category = new Category({ slug, ...req.body });
     console.log("category", category);
     await category.save();

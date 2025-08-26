@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { ApiResponse } from "./types";
 
 import categoryRouter from "./routes/categoryRoutes";
+import productRouter from "./routes/productRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -44,12 +45,13 @@ app.get("/", (req: Request, res: Response<ApiResponse>) => {
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API endpoint is working!",
+    message: "API endpoint is working! sdfsdaf",
     data: { timestamp: new Date().toISOString() },
   });
 });
 
 app.use("/api/categories", categoryRouter);
+app.use("/api/products", productRouter);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
