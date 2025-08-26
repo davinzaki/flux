@@ -21,14 +21,14 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./server
-          target: /app
+          path: ./server/src
+          target: /app/src
           ignore:
             - node_modules/
-            - dist/
-            - .git/
         - action: rebuild
           path: ./server/package.json
+        - action: rebuild
+          path: ./server/tsconfig.json
 
   client:
     build: ./client
