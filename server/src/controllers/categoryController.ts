@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Category from "../models/Category";
 import { default as generateSlug } from "slug";
 
-export const getCategories = async (req: Request, res: Response) => {
+export const findCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find({});
     res.status(200).send({
@@ -32,13 +32,45 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 };
 
-export const getCategory = async (req: Request, res: Response) => {
+export const findCategoryById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const category = await Category.findById(id);
     res.status(200).send({
       success: true,
-      message: "Successfully Get Category",
+      message: "Successfully Get Category By Id",
+      data: category,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const findCategoryBySlug = async (req: Request, res: Response) => {
+  try {
+    const { slug } = req.params;
+    const category = await Category.findOne({ slug });
+    res.status(200).send({
+      success: true,
+      message: "Successfully Get Category By Slug",
+      data: category,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateCategory = async (req: Request, res: Response) => {
+  try {
+    console.log(req.body);
+    console.log("req.params", req.params);
+    const { name } = req.body;
+    const { id } = req.params;
+    const slug = generateSlug(name);
+    const category = await Category.findByIdAndUpdate({ id }, { name, slug });
+    res.status(200).send({
+      success: true,
+      message: "Successfully Update Category",
       data: category,
     });
   } catch (error) {

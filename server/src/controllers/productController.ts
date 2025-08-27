@@ -4,7 +4,24 @@ import { default as generateSlug } from "slug";
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find();
+    // const products = await Product.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "categories",
+    //       localField: "categoryId",
+    //       foreignField: "_id",
+    //       as: "category",
+    //     },
+    //   },
+    //   { $unwind: "$category" },
+    // ]);
+
+    // const products = await Product.find().populate("slug name");
+
+    const products = await Product.find()
+      .populate("categoryId", "name slug")
+      .lean({ virtuals: true });
+
     res.status(200).send({
       success: true,
       message: "Successfully Get All Products",

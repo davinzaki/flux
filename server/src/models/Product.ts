@@ -7,12 +7,27 @@ const productSchema = new Schema(
     slug: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, min: 0 },
-    categoryId: { type: Schema.Types.ObjectId, ref: "Category" },
+    isActive: { type: Boolean, default: true },
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+      index: true,
+    },
     images: [String],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { versionKey: false } }
 );
 
-const Product = mongoose.model("Produdct", productSchema);
+productSchema.index({ slug: 1, isActive: 1 });
+
+productSchema.virtual("category", {
+  ref: "Category",
+  localField: "categoryId",
+  foreignField: "_id",
+  justOne: true,
+});
+
+const Product = mongoose.model("Product", productSchema);
 
 export default Product;

@@ -45,7 +45,7 @@ app.get("/", (req: Request, res: Response<ApiResponse>) => {
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API endpoint is working! sdfsdaf",
+    message: "API endpoint is working! sfgsf",
     data: { timestamp: new Date().toISOString() },
   });
 });
