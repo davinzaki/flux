@@ -2,9 +2,9 @@ import mongoose, { Schema } from "mongoose";
 
 const productSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
-    slug: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, min: 0 },
     isActive: { type: Boolean, default: true },
@@ -19,13 +19,11 @@ const productSchema = new Schema(
   { timestamps: true, toJSON: { versionKey: false } }
 );
 
-productSchema.index({ slug: 1, isActive: 1 });
-
 productSchema.virtual("category", {
-  ref: "Category",
-  localField: "categoryId",
-  foreignField: "_id",
-  justOne: true,
+  ref: "Category", // Reference Category model
+  localField: "categoryId", // Use product's categoryId field
+  foreignField: "_id", // Match with category's _id field
+  justOne: true, // Return single object (not array)
 });
 
 const Product = mongoose.model("Product", productSchema);
