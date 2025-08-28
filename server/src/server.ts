@@ -8,6 +8,8 @@ import { ApiResponse } from "./types";
 
 import categoryRouter from "./routes/categoryRoutes";
 import productRouter from "./routes/productRoutes";
+import path from "path";
+import { cwd } from "process";
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +23,9 @@ app.use(cors());
 app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// serve files from uploads
+app.use("/uploads", express.static(path.join(cwd(), "uploads")));
 
 // MongoDB Connection
 const connectDB = async (): Promise<void> => {

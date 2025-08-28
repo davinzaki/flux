@@ -1,13 +1,22 @@
 import { Request, Response } from "express";
 import Product from "../models/Product";
 import { default as generateSlug } from "slug";
+import { z } from "zod";
+
+const productSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  price: z.number().min(0),
+  stock: z.number().min(0),
+  categoryId: z.string(),
+});
 
 export const findProducts = async (req: Request, res: Response) => {
   try {
     const products = await Product.find()
       .populate("category", "name slug")
       .lean({ virtuals: true });
-    // .lean() is basically "read-only mode" for much better performance!
+    // .lean() is basically "read-only mode" for much better performance
 
     res.status(200).send({
       success: true,
@@ -63,10 +72,12 @@ export const findProductBySlug = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
-    const { name } = req.body;
-    const slug = generateSlug(name);
-    const product = new Product({ slug, ...req.body });
+    const images = (req.files as Express.Multer.File[]).map(
+      (file) => file.filename
+    );
+    // const parsed = productSchema.parse(req.body);
+    const slug = generateSlug(req.body.name);
+    const product = new Product({ slug, images, ...req.body });
     await product.save();
     res.status(201).send({
       success: true,

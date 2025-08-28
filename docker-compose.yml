@@ -30,6 +30,8 @@ services:
             - "*.log"
         - action: rebuild
           path: ./server/package.json
+    volumes: 
+        - ./uploads:/app/uploads
 
   client:
     build: ./client

@@ -5,6 +5,9 @@ import {
   findProductBySlug,
   findProducts,
 } from "../controllers/productController";
+import { upload } from "../middleware/multer";
+import { validate } from "../middleware/validate";
+import { productSchema } from "../schemas/productSchema";
 
 const router = express.Router();
 
@@ -16,6 +19,6 @@ const router = express.Router();
 router.get("/", findProducts);
 // router.get("/:id", findProductById);
 router.get("/:slug", findProductBySlug);
-router.post("/", createProduct);
+router.post("/", upload.array("images", 5), createProduct);
 
 export default router;
