@@ -1,18 +1,15 @@
+import "dotenv/config";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import { ApiResponse } from "./types";
 
 import categoryRouter from "./routes/categoryRoutes";
 import productRouter from "./routes/productRoutes";
 import path from "path";
 import { cwd } from "process";
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // serve files from uploads
 app.use("/uploads", express.static(path.join(cwd(), "uploads")));
+
+console.log("process.env.AWS_ACCESS_KEY_ID", process.env.AWS_ACCESS_KEY_ID);
 
 // MongoDB Connection
 const connectDB = async (): Promise<void> => {
@@ -50,7 +49,7 @@ app.get("/", (req: Request, res: Response<ApiResponse>) => {
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API endpoint is working! sfgsf",
+    message: "API endpoint is working!",
     data: { timestamp: new Date().toISOString() },
   });
 });

@@ -5,9 +5,9 @@ import {
   findProductBySlug,
   findProducts,
 } from "../controllers/productController";
-import { upload } from "../middleware/multer";
 import { validate } from "../middleware/validate";
 import { productSchema } from "../schemas/productSchema";
+import { upload } from "../middleware/multer";
 
 const router = express.Router();
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Product from "../models/Product";
 import { default as generateSlug } from "slug";
 import { z } from "zod";
+import { uploadFileToS3 } from "../utils/s3";
 
 const productSchema = z.object({
   name: z.string(),
@@ -72,19 +73,28 @@ export const findProductBySlug = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const images = (req.files as Express.Multer.File[]).map(
-      (file) => file.filename
+    const images = req.files as Express.Multer.File[];
+
+    const imageUrls = await Promise.all(
+      images.map((image) => uploadFileToS3(image, "products"))
     );
+    console.log("imageUrls", imageUrls);
     // const parsed = productSchema.parse(req.body);
     const slug = generateSlug(req.body.name);
-    const product = new Product({ slug, images, ...req.body });
+    const product = new Product({ slug, images: imageUrls, ...req.body });
     await product.save();
     res.status(201).send({
       success: true,
-      message: "Category Created Successfully",
+      message: "Product Created Successfully",
       data: product,
     });
-  } catch (error) {
-    res.status(400).json({ message: (error as Error).message });
+  } catch (err: any) {
+    if (err.code === 11000) {
+      res
+        .status(400)
+        .json({ message: "Slug already exists, please use another" });
+    } else {
+      res.status(400).json({ message: (err as Error).message });
+    }
   }
 };
