@@ -13,4 +13,21 @@ export interface User {
   updatedAt: Date;
 }
 
-// Add more types as needed
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  createdAt: Date;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  stock: number;
+  categoryId: number;
+  images: JSON;
+  createdAt: Date;
+}

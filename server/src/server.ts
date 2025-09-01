@@ -1,13 +1,15 @@
+import "dotenv/config";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import { ApiResponse } from "./types";
 
-// Load environment variables
-dotenv.config();
+import categoryRouter from "./routes/categoryRoutes";
+import productRouter from "./routes/productRoutes";
+import path from "path";
+import { cwd } from "process";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +20,9 @@ app.use(cors());
 app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// serve files from uploads
+app.use("/uploads", express.static(path.join(cwd(), "uploads")));
 
 // MongoDB Connection
 const connectDB = async (): Promise<void> => {
@@ -34,7 +39,7 @@ const connectDB = async (): Promise<void> => {
 app.get("/", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
+    message: "Flux API is running!",
     data: { timestamp: new Date().toISOString() },
   });
 });
@@ -42,10 +47,13 @@ app.get("/", (req: Request, res: Response<ApiResponse>) => {
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
+    message: "API endpoint is working!",
     data: { timestamp: new Date().toISOString() },
   });
 });
+
+app.use("/api/categories", categoryRouter);
+app.use("/api/products", productRouter);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
