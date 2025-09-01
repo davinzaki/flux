@@ -16,6 +16,7 @@ export const updateProductSchema = z.object({
   price: z.coerce.number().nonnegative(),
   stock: z.coerce.number().int().nonnegative(),
   categoryId: z.string().min(1, "Category is required"),
+  images: z.array(z.string()).optional(),
   imagesToDelete: z.array(z.string()).optional(),
 });
 

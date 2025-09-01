@@ -35,13 +35,6 @@ export const updateProduct = async (req: Request, res: Response) => {
       return;
     }
 
-    const productExists = await Product.findById(id);
-
-    if (!productExists) {
-      res.status(404).json({ message: "Product not found" });
-      return;
-    }
-
     const product = await updateProductService(req.body, images, id);
 
     res.status(201).send({

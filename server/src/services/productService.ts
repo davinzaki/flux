@@ -45,27 +45,38 @@ export const updateProductService = async (
 ) => {
   const { name, imagesToDelete } = body;
 
-  const slug = generateSlug(body.name);
-
-  if (imagesToDelete) {
-    deleteFilesFromS3(imagesToDelete);
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new Error("Product not found");
   }
 
-  let product;
-  if (files.length > 0) {
-    const newImageUrls = await Promise.all(
+  let slug: string | undefined;
+  if (name && name !== product.name) {
+    slug = generateSlug(name);
+  }
+
+  if (imagesToDelete?.length) {
+    await deleteFilesFromS3(imagesToDelete);
+  }
+
+  let newImageUrls: string[] = [];
+  if (files?.length) {
+    newImageUrls = await Promise.all(
       files.map((file) => uploadFileToS3(file, "products"))
     );
-
-    product = { slug, images: newImageUrls, ...body };
-    console.log("payload product", product);
-
-    // product = await Product.findByIdAndUpdate(
-    //   { id },
-    //   { images: newImageUrls, ...body }
-    // );
   }
-  return product;
+  const updatedPayload = {
+    ...body,
+    ...(slug && { slug }),
+    ...(newImageUrls.length > 0 && { images: newImageUrls }),
+  };
+
+  console.log("payload product", updatedPayload);
+  const updatedProduct = await Product.findByIdAndUpdate(id, updatedPayload, {
+    new: true,
+  });
+
+  return updatedProduct;
 };
 
 export const findProductsService = async () => {
