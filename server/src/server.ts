@@ -24,8 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 // serve files from uploads
 app.use("/uploads", express.static(path.join(cwd(), "uploads")));
 
-console.log("process.env.AWS_ACCESS_KEY_ID", process.env.AWS_ACCESS_KEY_ID);
-
 // MongoDB Connection
 const connectDB = async (): Promise<void> => {
   try {

@@ -8,6 +8,7 @@ import {
   findCategoryBySlugService,
   updateCategoryService,
 } from "../services/categoryService";
+import { CreateCategoryDto } from "../validators/categoryValidator";
 
 export const findCategories = async (req: Request, res: Response) => {
   try {
@@ -31,7 +32,7 @@ export const createCategory = async (req: Request, res: Response) => {
       data: category,
     });
   } catch (error) {
-    res.status(400).json({ message: (error as Error).message });
+    res.status(400).json({ message: "sfdasf" });
   }
 };
 
@@ -82,18 +83,25 @@ export const findCategoryBySlug = async (
 };
 
 export const updateCategory = async (
-  req: Request,
+  req: Request<{ id: string; slug: string }, {}, CreateCategoryDto>,
   res: Response
 ): Promise<void> => {
   try {
     const { id } = req.params;
+
+    const categoryExists = await Category.findById(id);
+
     if (!id) {
       res.status(400).json({ message: "Category ID is required" });
       return;
     }
-    const { name } = req.body;
-    const category = await updateCategoryService(name, id);
-    res.status(200).send({
+
+    if (!categoryExists) {
+      res.status(404).json({ message: "Category not found" });
+      return;
+    }
+    const category = await updateCategoryService(req.body, id);
+    res.status(200).json({
       success: true,
       message: "Successfully Update Category",
       data: category,

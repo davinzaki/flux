@@ -4,10 +4,13 @@ import {
   findProductsService,
   findProductByIdService,
   findProductBySlugService,
+  updateProductService,
 } from "../services/productService";
+import Product from "../models/Product";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const product = await createProductService(
       req.body,
       req.files as Express.Multer.File[]
@@ -18,13 +21,36 @@ export const createProduct = async (req: Request, res: Response) => {
       data: product,
     });
   } catch (err: any) {
-    if (err.code === 11000) {
-      res
-        .status(400)
-        .json({ message: "Slug already exists, please use another" });
-    } else {
-      res.status(400).json({ message: err.message });
+    res.status(400).json({ message: err.message });
+  }
+};
+
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const images = req.files as Express.Multer.File[];
+
+    if (!id) {
+      res.status(400).json({ message: "Product ID is required" });
+      return;
     }
+
+    const productExists = await Product.findById(id);
+
+    if (!productExists) {
+      res.status(404).json({ message: "Product not found" });
+      return;
+    }
+
+    const product = await updateProductService(req.body, images, id);
+
+    res.status(201).send({
+      success: true,
+      message: "Product Updated Successfully",
+      data: product,
+    });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
