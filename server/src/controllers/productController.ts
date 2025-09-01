@@ -5,6 +5,7 @@ import {
   findProductByIdService,
   findProductBySlugService,
   updateProductService,
+  deleteProductService,
 } from "../services/productService";
 import Product from "../models/Product";
 
@@ -47,6 +48,27 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).json({ message: "Product ID is required" });
+      return;
+    }
+
+    const product = await deleteProductService(id);
+
+    res.status(200).send({
+      success: true,
+      message: "Successfully Delete Category",
+      data: product,
+    });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
 export const findProducts = async (req: Request, res: Response) => {
   try {
     const products = await findProductsService();
@@ -55,8 +77,8 @@ export const findProducts = async (req: Request, res: Response) => {
       message: "Successfully Get All Products",
       data: products,
     });
-  } catch {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -78,8 +100,8 @@ export const findProductById = async (
       message: "Successfully Get Product By Id",
       data: product,
     });
-  } catch {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -101,7 +123,7 @@ export const findProductBySlug = async (
       message: "Successfully Get Product By Id",
       data: product,
     });
-  } catch {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };

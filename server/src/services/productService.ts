@@ -79,6 +79,26 @@ export const updateProductService = async (
   return updatedProduct;
 };
 
+export const deleteProductService = async (id: string) => {
+  const product = await Product.findById(id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  const { images } = product;
+
+  console.log("images", images);
+
+  if (images?.length) {
+    await deleteFilesFromS3(images);
+  }
+
+  const deletedProduct = await Product.findByIdAndDelete(id);
+
+  return deletedProduct;
+};
+
 export const findProductsService = async () => {
   return await Product.find()
     .populate("category", "name slug")

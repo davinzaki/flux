@@ -77,8 +77,8 @@ export const findCategoryBySlug = async (
       message: "Successfully Get Category By Id",
       data: product,
     });
-  } catch {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -120,7 +120,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
       message: "Successfully Delete Category",
       data: category,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };

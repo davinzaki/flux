@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProduct,
+  deleteProduct,
   findProductById,
   findProductBySlug,
   findProducts,
@@ -33,5 +34,6 @@ router.put(
   validate(updateProductSchema),
   updateProduct
 );
+router.delete("/:id", deleteProduct);
 
 export default router;
