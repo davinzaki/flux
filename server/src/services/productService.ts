@@ -14,8 +14,6 @@ export const createProductService = async (
   body: CreateProductDto,
   files: Express.Multer.File[]
 ) => {
-  console.log("files", files);
-
   const slug = generateSlug(body.name);
 
   const productExists = await Product.findOne({ slug });
@@ -32,7 +30,7 @@ export const createProductService = async (
 
   const product = new Product({
     slug,
-    files: imageUrls,
+    images: imageUrls,
     ...body,
   });
 

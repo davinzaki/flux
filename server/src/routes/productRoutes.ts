@@ -8,8 +8,11 @@ import {
 } from "../controllers/productController";
 import { validate } from "../middleware/validate";
 import { productSchema } from "../schemas/productSchema";
-import { upload } from "../middleware/multer";
-import { createProductSchema } from "../validators/productVaidator";
+import { upload, validateImageMagicNumber } from "../middleware/multer";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../validators/productVaidator";
 
 const router = express.Router();
 
@@ -19,9 +22,16 @@ router.get("/:slug", findProductBySlug);
 router.post(
   "/",
   upload.array("images", 5),
+  validateImageMagicNumber,
   validate(createProductSchema),
   createProduct
 );
-router.put("/", upload.array("images", 5), updateProduct);
+router.put(
+  "/:id",
+  upload.array("images", 5),
+  validateImageMagicNumber,
+  validate(updateProductSchema),
+  updateProduct
+);
 
 export default router;
