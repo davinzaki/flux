@@ -17,7 +17,10 @@ export const updateProductSchema = z.object({
   stock: z.coerce.number().int().nonnegative(),
   categoryId: z.string().min(1, "Category is required"),
   images: z.array(z.string()).optional(),
-  imagesToDelete: z.array(z.string()).optional(),
+  imagesToDelete: z
+    .union([z.string(), z.array(z.string())])
+    .transform((val) => (typeof val === "string" ? [val] : val))
+    .optional(),
 });
 
 export type UpdateProductDto = z.infer<typeof updateProductSchema>;

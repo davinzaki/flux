@@ -45,6 +45,8 @@ export const updateProductService = async (
 ) => {
   const { name, imagesToDelete } = body;
 
+  console.log("imagesToDelete", imagesToDelete);
+
   const product = await Product.findById(id);
   if (!product) {
     throw new Error("Product not found");
@@ -55,9 +57,20 @@ export const updateProductService = async (
     slug = generateSlug(name);
   }
 
+  console.log("product", product);
+
+  let productExists: string[] = [];
   if (imagesToDelete?.length) {
     await deleteFilesFromS3(imagesToDelete);
+
+    productExists = product.images.filter(
+      (image) => !imagesToDelete.includes(image)
+    );
+  } else {
+    productExists = product.images;
   }
+
+  console.log("productExists", productExists);
 
   let newImageUrls: string[] = [];
   if (files?.length) {
@@ -68,7 +81,7 @@ export const updateProductService = async (
   const updatedPayload = {
     ...body,
     ...(slug && { slug }),
-    ...(newImageUrls.length > 0 && { images: newImageUrls }),
+    images: [...newImageUrls, ...productExists],
   };
 
   console.log("payload product", updatedPayload);
@@ -88,8 +101,6 @@ export const deleteProductService = async (id: string) => {
 
   const { images } = product;
 
-  console.log("images", images);
-
   if (images?.length) {
     await deleteFilesFromS3(images);
   }
@@ -106,13 +117,24 @@ export const findProductsService = async () => {
 };
 
 export const findProductByIdService = async (id: string) => {
-  return await Product.findById(id)
+  const product = await Product.findById(id)
     .populate("category", "name slug")
     .lean({ virtuals: true });
+
+  console.log("product", product);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return product;
 };
 
 export const findProductBySlugService = async (slug: string) => {
-  return await Product.findOne({ slug })
+  const product = await Product.findOne({ slug })
     .populate("category", "name slug")
     .lean({ virtuals: true });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return product;
 };
