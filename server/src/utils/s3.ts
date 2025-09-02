@@ -55,7 +55,7 @@ export const deleteFilesFromS3 = async (urls: string[]): Promise<void> => {
   await Promise.all(
     urls.map((url) => {
       const key = extractKeyFromUrl(url);
-      return key ? deleteFileFromS3(url) : Promise.resolve();
+      return key ? deleteFileFromS3(key) : Promise.resolve();
     })
   );
 };
@@ -66,6 +66,5 @@ export const deleteFilesFromS3 = async (urls: string[]): Promise<void> => {
  */
 export const extractKeyFromUrl = (url: string): string | null => {
   const match = url.match(/amazonaws\.com\/(.+)$/);
-  console.log("match", match);
   return match?.[1] ?? null;
 };
