@@ -45,47 +45,32 @@ export const updateProductService = async (
 ) => {
   const { name, imagesToDelete } = body;
 
-  console.log("imagesToDelete", imagesToDelete);
-
   const product = await Product.findById(id);
   if (!product) {
     throw new Error("Product not found");
   }
 
-  let slug: string | undefined;
-  if (name && name !== product.name) {
-    slug = generateSlug(name);
-  }
+  const slug = name && name !== product.name ? generateSlug(name) : undefined;
 
-  console.log("product", product);
-
-  let productExists: string[] = [];
+  let existingImages = product.images;
   if (imagesToDelete?.length) {
     await deleteFilesFromS3(imagesToDelete);
-
-    productExists = product.images.filter(
+    existingImages = product.images.filter(
       (image) => !imagesToDelete.includes(image)
     );
-  } else {
-    productExists = product.images;
   }
 
-  console.log("productExists", productExists);
+  const newImageUrls = files?.length
+    ? await Promise.all(files.map((file) => uploadFileToS3(file, "products")))
+    : [];
 
-  let newImageUrls: string[] = [];
-  if (files?.length) {
-    newImageUrls = await Promise.all(
-      files.map((file) => uploadFileToS3(file, "products"))
-    );
-  }
-  const updatedPayload = {
+  const updatePayload = {
     ...body,
     ...(slug && { slug }),
-    images: [...newImageUrls, ...productExists],
+    images: [...newImageUrls, ...existingImages],
   };
 
-  console.log("payload product", updatedPayload);
-  const updatedProduct = await Product.findByIdAndUpdate(id, updatedPayload, {
+  const updatedProduct = await Product.findByIdAndUpdate(id, updatePayload, {
     new: true,
   });
 
