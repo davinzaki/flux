@@ -40,6 +40,7 @@ export const uploadFileToS3 = async (
  * Delete a file from S3 by key
  */
 export const deleteFileFromS3 = async (fileKey: string): Promise<void> => {
+  console.log("fileKey", fileKey);
   await s3.send(
     new DeleteObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME!,
@@ -55,7 +56,7 @@ export const deleteFilesFromS3 = async (urls: string[]): Promise<void> => {
   await Promise.all(
     urls.map((url) => {
       const key = extractKeyFromUrl(url);
-      return key ? deleteFileFromS3(url) : Promise.resolve();
+      return key ? deleteFileFromS3(key) : Promise.resolve();
     })
   );
 };
