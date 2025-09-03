@@ -18,8 +18,8 @@ export const findCategories = async (req: Request, res: Response) => {
       message: "Successfully Get All Categories",
       data: categories,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -31,8 +31,8 @@ export const createCategory = async (req: Request, res: Response) => {
       message: "Category Created Successfully",
       data: category,
     });
-  } catch (error) {
-    res.status(400).json({ message: "sfdasf" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -54,8 +54,8 @@ export const findCategoryById = async (
       message: "Successfully Get Category By Id",
       data: category,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
   }
 };
 

@@ -31,3 +31,25 @@ export const verifyToken = (
     next();
   });
 };
+
+export const optionalAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const authHeader = req.headers["authorization"];
+  const token =
+    authHeader && authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+  if (!token) {
+    next();
+    return;
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (!err) {
+      req.user = decoded as JWTUser;
+    }
+    next();
+  });
+};
