@@ -9,8 +9,15 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  password: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface JWTUser {
+  id: string;
+  email: string;
+  name: string;
 }
 
 export interface Category {

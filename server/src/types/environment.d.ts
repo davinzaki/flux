@@ -11,6 +11,7 @@ declare global {
       AWS_SECRET_ACCESS_KEY: string;
       AWS_REGION: string;
       AWS_S3_BUCKET_NAME: string;
+      JWT_SECRET: string
     }
   }
 }
