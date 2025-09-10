@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { default as jwt, JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { JWTUser } from "../types";
 
 export const verifyToken = (

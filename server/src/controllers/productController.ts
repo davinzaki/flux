@@ -70,11 +70,12 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
 export const findProducts = async (req: Request, res: Response) => {
   try {
-    const products = await findProductsService();
+    const result = await findProductsService(req);
+
     res.status(200).send({
       success: true,
       message: "Successfully Get All Products",
-      data: products,
+      result,
     });
   } catch (err: any) {
     res.status(400).json({ message: err.message });

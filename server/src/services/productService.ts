@@ -9,6 +9,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from "../validators/productVaidator";
+import { Request } from "express";
 
 export const createProductService = async (
   body: CreateProductDto,
@@ -95,11 +96,35 @@ export const deleteProductService = async (id: string) => {
   return deletedProduct;
 };
 
-export const findProductsService = async () => {
-  return await Product.find()
+export const findProductsService = async (req: Request) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const products = await Product.find()
+    .limit(limit)
+    .skip((page - 1) * limit)
     .populate("category", "name slug")
-    .lean({ virtuals: true });
+    .lean({ virtuals: true })
+    .sort({ createdAt: -1 });
+
+  const totalDocuments = await Product.countDocuments();
+
+  const result = {
+    data: products,
+    pagination: {
+      limit,
+      currentPage: page,
+      totalPages: Math.ceil(totalDocuments / limit),
+      totalRecords: totalDocuments,
+    },
+  };
+
+  return result;
 };
+
+// limit(), number as param, limit number of data we send or we can get in one request
+// skip(<offset>), offset (the number of documents to skip from query result) as parameter,
+// skip() is method to skip a n number of data or not return that n data
 
 export const findProductByIdService = async (id: string) => {
   const product = await Product.findById(id)

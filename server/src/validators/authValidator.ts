@@ -7,3 +7,10 @@ export const registerSchema = z.object({
 });
 
 export type RegisterDto = z.infer<typeof registerSchema>;
+
+export const loginSchema = z.object({
+  email: z.email("Format email tidak valid"),
+  password: z.string().min(6, "Kata sandi minimal 6 karakter"),
+});
+
+export type LoginDto = z.infer<typeof loginSchema>;
