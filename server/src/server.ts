@@ -25,15 +25,11 @@ app.use(express.urlencoded({ extended: true }));
 // serve files from uploads
 app.use("/uploads", express.static(path.join(cwd(), "uploads")));
 
-// MongoDB Connection
-connectDB();
-
 // Routes
 app.get("/", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
     message: "Flux API is running!",
-    data: { timestamp: new Date().toISOString() },
   });
 });
 
@@ -41,7 +37,6 @@ app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
     message: "API endpoint is working!",
-    data: { timestamp: new Date().toISOString() },
   });
 });
 

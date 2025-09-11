@@ -1,8 +1,10 @@
+import connectDB from "../config/db";
 import User from "../models/User";
 import bcryptjs from "bcryptjs";
 
 const seedAdmin = async () => {
   try {
+    await connectDB();
     const adminEmail = "admin@flux.com";
 
     const existingAdmin = await User.findOne({ email: adminEmail });
@@ -13,7 +15,7 @@ const seedAdmin = async () => {
       const hashedPassword = await bcryptjs.hash("qwerpoiu", 12);
       const newAdmin = new User({
         name: "admin",
-        email: "admin@flux.com",
+        email: adminEmail,
         password: hashedPassword,
         role: "admin",
       });
