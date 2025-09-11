@@ -14,6 +14,7 @@ import {
   createProductSchema,
   updateProductSchema,
 } from "../validators/productVaidator";
+import { verifyToken } from "../middleware/auth";
 
 const router = express.Router();
 
