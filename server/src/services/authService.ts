@@ -1,4 +1,5 @@
 import User from "../models/User";
+import { JWTUser } from "../types";
 import { LoginDto, RegisterDto } from "../validators/authValidator";
 import becrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -40,15 +41,78 @@ export const loginService = async (body: LoginDto) => {
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    throw new Error("Incorrect email!");
+    throw new Error("User doesn't exists!");
   }
 
   const passwordMatch = await becrypt.compare(password, user.password);
   if (!passwordMatch) {
-    throw new Error("Incorrect password!");
+    throw new Error("Invalid credentials!");
   }
 
-  const token = jwt.sign({ email: email }, process.env.JWT_SECRET);
+  const jwtPayload: JWTUser | any = {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
 
-  return token;
+  const accessToken = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+    issuer: "flux",
+  });
+  const refreshToken = jwt.sign(
+    { userId: user._id.toString() },
+    process.env.JWT_REFRESH_SECRET,
+    {
+      expiresIn: "7d",
+      issuer: "flux",
+    }
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+    user: {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role || "user",
+    },
+  };
+};
+
+export const refreshTokenService = async (
+  refreshToken: string
+): Promise<{ accessToken: string }> => {
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET
+    ) as any;
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const jwtPayload: JWTUser = {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+
+    const accessToken = jwt.sign(jwtPayload, process.env.JWT_SECRET as string, {
+      expiresIn: "15m",
+      issuer: "flux",
+    });
+
+    return { accessToken };
+  } catch (error) {
+    throw new Error("Invalid or expired refresh token");
+  }
+};
+
+export const logoutService = async (refreshToken: string): Promise<void> => {
+  return Promise.resolve();
 };

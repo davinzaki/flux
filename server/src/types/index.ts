@@ -10,14 +10,15 @@ export interface User {
   email: string;
   name: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface JWTUser {
   id: string;
   email: string;
   name: string;
+  role: string;
 }
 
 export interface Category {

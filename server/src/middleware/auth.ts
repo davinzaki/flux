@@ -16,14 +16,9 @@ export const verifyToken = (
     return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       res.status(403).json({ error: "Invalid or expired token" });
-      return;
-    }
-
-    if (!decoded || typeof decoded === "string") {
-      res.status(403).json({ error: "Invalid token payload" });
       return;
     }
 
@@ -52,4 +47,16 @@ export const optionalAuth = (
     }
     next();
   });
+};
+
+export const isAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const role = req.user?.role;
+  if (!role) {
+    res.status(402).json({ message: "Access Denied!" });
+  }
+  next();
 };
