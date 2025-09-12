@@ -117,10 +117,10 @@ export const findProductBySlug = async (
       return;
     }
 
-    const product = await findProductByIdService(slug);
+    const product = await findProductBySlugService(slug);
     res.status(200).send({
       success: true,
-      message: "Successfully Get Product By Id",
+      message: "Successfully Get Product By Slug",
       data: product,
     });
   } catch (err: any) {

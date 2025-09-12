@@ -19,8 +19,8 @@ import { verifyToken } from "../middleware/auth";
 const router = express.Router();
 
 router.get("/", findProducts);
-router.get("/:id", findProductById);
-// router.get("/:slug", findProductBySlug);
+// router.get("/:id", findProductById);
+router.get("/:slug", findProductBySlug);
 router.post(
   "/",
   upload.array("images", 5),

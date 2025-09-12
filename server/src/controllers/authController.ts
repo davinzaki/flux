@@ -52,7 +52,9 @@ export const refreshToken = async (
 ): Promise<void> => {
   try {
     // Get refresh token from cookie or request body
-    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+
+    console.log("refreshToken", refreshToken);
 
     if (!refreshToken) {
       res.status(401).json({
