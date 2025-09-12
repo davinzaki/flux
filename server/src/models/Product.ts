@@ -16,7 +16,7 @@ const productSchema = new Schema(
     },
     images: [String],
   },
-  { timestamps: true, toJSON: { versionKey: false } }
+  { timestamps: true, versionKey: false }
 );
 
 productSchema.virtual("category", {

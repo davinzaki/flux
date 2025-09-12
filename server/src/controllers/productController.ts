@@ -19,7 +19,6 @@ export const createProduct = async (req: Request, res: Response) => {
     res.status(201).send({
       success: true,
       message: "Product Created Successfully",
-      data: product,
     });
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -71,11 +70,12 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
 export const findProducts = async (req: Request, res: Response) => {
   try {
-    const products = await findProductsService();
+    const result = await findProductsService(req);
+
     res.status(200).send({
       success: true,
       message: "Successfully Get All Products",
-      data: products,
+      result,
     });
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -117,10 +117,10 @@ export const findProductBySlug = async (
       return;
     }
 
-    const product = await findProductByIdService(slug);
+    const product = await findProductBySlugService(slug);
     res.status(200).send({
       success: true,
-      message: "Successfully Get Product By Id",
+      message: "Successfully Get Product By Slug",
       data: product,
     });
   } catch (err: any) {
