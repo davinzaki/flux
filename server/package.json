@@ -8,23 +8,34 @@
     "dev": "tsx watch --clear-screen=false src/server.ts",
     "dev:legacy": "nodemon --legacy-watch --exec tsx src/server.ts",
     "clean": "rimraf dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:admin": "tsx src/seeder/seedAdmin.ts"
   },
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.878.0",
     "@types/http-errors": "^2.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^4.19.2",
+    "file-type": "^21.0.0",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "slug": "^11.0.0",
+    "zod": "^4.1.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
+    "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.3.0",
+    "@types/slug": "^5.0.9",
     "nodemon": "^3.1.10",
     "rimraf": "^6.0.1",
     "tsx": "^4.20.5",

@@ -1,13 +1,16 @@
+import "dotenv/config";
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
 import { ApiResponse } from "./types";
 
-// Load environment variables
-dotenv.config();
+import categoryRoutes from "./routes/categoryRoutes";
+import productRoutes from "./routes/productRoutes";
+import authRoutes from "./routes/authRoutes";
+import path from "path";
+import { cwd } from "process";
+import connectDB from "./config/db";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,37 +22,30 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
-const connectDB = async (): Promise<void> => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB Connected");
-  } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
-    process.exit(1);
-  }
-};
+// serve files from uploads
+app.use("/uploads", express.static(path.join(cwd(), "uploads")));
 
 // Routes
 app.get("/", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
-    data: { timestamp: new Date().toISOString() },
+    message: "Flux API is running!",
   });
 });
 
 app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
   res.json({
     success: true,
-    message: "API is working!",
-    data: { timestamp: new Date().toISOString() },
+    message: "API endpoint is working!",
   });
 });
 
+app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
   res.status(500).json({
     message: "Something went wrong!",
     ...(process.env.NODE_ENV === "development" && { error: err.message }),

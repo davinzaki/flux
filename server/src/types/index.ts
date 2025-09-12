@@ -9,8 +9,33 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  password: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Add more types as needed
+export interface JWTUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  createdAt: Date;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  stock: number;
+  categoryId: number;
+  images: JSON;
+  createdAt: Date;
+}
