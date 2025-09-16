@@ -15,8 +15,8 @@ const router = express.Router();
 router.get("/", findCategories);
 router.post("/", validate(createCategorySchema), createCategory);
 router.get("/:slug", findCategoryBySlug);
-router.get("/:slug/:id", findCategoryById);
-router.put("/:slug/:id", validate(createCategorySchema), updateCategory);
-router.delete("/:slug/:id", deleteCategory);
+// router.get("/:slug/:id", findCategoryById);
+router.put("/:id", validate(createCategorySchema), updateCategory);
+router.delete("/:id", deleteCategory);
 
 export default router;
