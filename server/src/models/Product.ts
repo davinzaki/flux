@@ -19,12 +19,17 @@ const productSchema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
+//models/Products.ts
+
 productSchema.virtual("category", {
-  ref: "Category", // Reference Category model
-  localField: "categoryId", // Use product's categoryId field
-  foreignField: "_id", // Match with category's _id field
-  justOne: true, // Return single object (not array)
+  ref: "Category", // referensi model Category
+  localField: "categoryId", // menggunakan field dari modal Product
+  foreignField: "_id", // cocokan dengan field _id Category
+  justOne: true, // return single object
 });
+
+productSchema.set("toJSON", { virtuals: true }); // supaya waktu di-convert ke JSON field virtual ikut tampil
+productSchema.set("toObject", { virtuals: true });
 
 const Product = mongoose.model("Product", productSchema);
 

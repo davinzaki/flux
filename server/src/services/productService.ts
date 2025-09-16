@@ -96,30 +96,36 @@ export const deleteProductService = async (id: string) => {
   return deletedProduct;
 };
 
+// export const findProductsService = async (req: Request) => {
+//   const page = Number(req.query.page) || 1;
+//   const limit = Number(req.query.limit) || 10;
+
+//   const products = await Product.find()
+//     .limit(limit)
+//     .skip((page - 1) * limit)
+//     .populate("category", "name slug")
+//     .lean({ virtuals: true })
+//     .sort({ createdAt: -1 });
+
+//   const totalDocuments = await Product.countDocuments();
+
+//   const result = {
+//     data: products,
+//     pagination: {
+//       limit,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalDocuments / limit),
+//       totalRecords: totalDocuments,
+//     },
+//   };
+
+//   return result;
+// };
+
+// services/productService.ts
+
 export const findProductsService = async (req: Request) => {
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
-
-  const products = await Product.find()
-    .limit(limit)
-    .skip((page - 1) * limit)
-    .populate("category", "name slug")
-    .lean({ virtuals: true })
-    .sort({ createdAt: -1 });
-
-  const totalDocuments = await Product.countDocuments();
-
-  const result = {
-    data: products,
-    pagination: {
-      limit,
-      currentPage: page,
-      totalPages: Math.ceil(totalDocuments / limit),
-      totalRecords: totalDocuments,
-    },
-  };
-
-  return result;
+  return await Product.find().populate("category");
 };
 
 // limit(), number as param, limit number of data we send or we can get in one request

@@ -83,7 +83,7 @@ export const findCategoryBySlug = async (
 };
 
 export const updateCategory = async (
-  req: Request<{ id: string; slug: string }, {}, CreateCategoryDto>,
+  req: Request<{ id: string }, {}, CreateCategoryDto>,
   res: Response
 ): Promise<void> => {
   try {
