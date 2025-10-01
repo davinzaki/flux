@@ -1,14 +1,14 @@
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
-import { EyeIcon, EyeOffIcon, LockIcon, Mail } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, Loader2Icon, LockIcon, Mail } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useLogin } from "@/hooks/useAuth"
 
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const { mutate } = useLogin()
+  const { mutate, isPending } = useLogin()
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: '',
@@ -26,7 +26,7 @@ const LoginForm = () => {
   }
   return (
     <div className="flex flex-col text-white w-[358px] bg-black rounded-3xl p-6  gap-4" >
-      <h1 className="font-intergralcf text-4xl font-bold" >Login</h1>
+      <h1 className=" text-4xl font-bold" >Login</h1>
       <p>Doesn't have an account? Register here.</p>
 
       <form onSubmit={onSubmit}>
@@ -53,9 +53,19 @@ const LoginForm = () => {
               {...register('password')}
             />
           </div>
-          <Button variant="pill" size="pill" className="font-satoshi">
-            Login
-          </Button>
+          {isPending ?
+            (
+              <Button size="sm" disabled>
+                <Loader2Icon className="animate-spin" />
+                Loading
+              </Button>)
+            : (
+              <Button variant="pill" size="pill" className="font-satoshi">
+                Login
+              </Button>
+            )}
+
+
         </div>
       </form>
     </div>
