@@ -2,7 +2,7 @@ import LoginForm from "@/components/auth/LoginForm"
 
 const LoginPage = () => {
     return (
-        <div>
+        <div className="flex justify-center items-center my-auto h-screen">
             <LoginForm />
         </div>
     )

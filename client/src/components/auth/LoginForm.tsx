@@ -18,14 +18,14 @@ const LoginForm = () => {
 
   const onSubmit = handleSubmit((data) => {
     console.log('onSubmit', data)
+    mutate(data)
   })
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
   return (
-    <div className="text-white w-[358px] bg-black rounded-3xl p-6 flex flex-col gap-4" >
-
+    <div className="flex flex-col text-white w-[358px] bg-black rounded-3xl p-6  gap-4" >
       <h1 className="font-intergralcf text-4xl font-bold" >Login</h1>
       <p>Doesn't have an account? Register here.</p>
 
