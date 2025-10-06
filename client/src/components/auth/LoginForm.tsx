@@ -25,49 +25,49 @@ const LoginForm = () => {
     setShowPassword(!showPassword)
   }
   return (
-    <div className="flex flex-col text-white w-[358px] bg-black rounded-3xl p-6  gap-4" >
-      <h1 className=" text-4xl font-bold" >Login</h1>
-      <p>Doesn't have an account? Register here.</p>
+    <div className="flex flex-col text-white w-[358px] sm:h-screen bg-black rounded-3xl sm:rounded-none sm:justify-center sm:items-center" >
+      <div className="flex flex-col p-6 gap-4">
+        <h1 className=" text-4xl font-bold" >Login</h1>
+        <p>Doesn't have an account? Register here.</p>
 
-      <form onSubmit={onSubmit}>
-
-
-        <div className="flex flex-col gap-4 w-full max-w-sm">
-          <Input
-            type="email"
-            placeholder="Enter your email address"
-            icon={<Mail className="size-5 text-muted-foreground" />}
-            {...register('email')}
-          />
-          <div className="flex">
+        <form onSubmit={onSubmit}>
+          <div className="flex flex-col gap-4 w-full max-w-sm">
             <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              icon={<LockIcon className="size-5 text-muted-foreground" />}
-              icon2={<div onClick={togglePasswordVisibility}>
-                {showPassword ?
-                  <EyeIcon /> : <EyeOffIcon />
-                }
-
-              </div>}
-              {...register('password')}
+              type="email"
+              placeholder="Enter your email address"
+              icon={<Mail className="size-5 text-muted-foreground" />}
+              {...register('email')}
             />
+            <div className="flex">
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                icon={<LockIcon className="size-5 text-muted-foreground" />}
+                icon2={<div onClick={togglePasswordVisibility}>
+                  {showPassword ?
+                    <EyeIcon /> : <EyeOffIcon />
+                  }
+
+                </div>}
+                {...register('password')}
+              />
+            </div>
+            {isPending ?
+              (
+                <Button size="sm" disabled>
+                  <Loader2Icon className="animate-spin" />
+                  Loading
+                </Button>)
+              : (
+                <Button variant="pill" size="pill" className="font-satoshi">
+                  Login
+                </Button>
+              )}
+
+
           </div>
-          {isPending ?
-            (
-              <Button size="sm" disabled>
-                <Loader2Icon className="animate-spin" />
-                Loading
-              </Button>)
-            : (
-              <Button variant="pill" size="pill" className="font-satoshi">
-                Login
-              </Button>
-            )}
-
-
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
