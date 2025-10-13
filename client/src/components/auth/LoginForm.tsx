@@ -5,17 +5,35 @@ import { EyeIcon, EyeOffIcon, Loader2Icon, LockIcon, Mail } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useLogin } from "@/hooks/useAuth"
 import { Link } from "react-router-dom"
+import { useAuthContext } from "@/context/AuthContext"
+import { toast } from "sonner"
 
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const { mutate, isPending } = useLogin()
+  const { mutate, isPending } = useLogin(
+    {
+      onSuccess: (res) => {
+        const { accessToken, refreshToken, user } = res.data
+        toast.success(`Welcome back, ${user.name}!`)
+        setAuth(user, accessToken, refreshToken)
+      },
+      onError: (err) => {
+        console.log('err', err)
+        toast.error("Login failed", {
+          description: err?.response?.data?.message
+        })
+        console.error(err)
+      }
+    }
+  )
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: '',
       password: ''
     },
   })
+  const { setAuth } = useAuthContext()
 
   const onSubmit = handleSubmit((data) => {
     console.log('onSubmit', data)

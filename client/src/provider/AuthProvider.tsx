@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         setAccessToken(access)
         setRefreshToken(refresh)
         localStorage.setItem('token', access)
-        localStorage.setItem('refreshToke', refresh)
+        localStorage.setItem('refreshToken', refresh)
         localStorage.setItem('user', JSON.stringify(user))
     }
 

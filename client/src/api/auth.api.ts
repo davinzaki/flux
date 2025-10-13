@@ -1,17 +1,12 @@
+import type { LoginApiResponse } from "@/types/auth.type";
 import type { LoginDto, RegisterDto } from "../schemas/auth.schema";
 import { api } from "../services/axios";
 import type { ApiResponse } from "../types/api";
 import type { User } from "../types/user.entity";
 
-interface loginApiResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-}
-
 export const login = async ({
   ...body
-}: LoginDto): Promise<ApiResponse<loginApiResponse>> => {
+}: LoginDto): Promise<ApiResponse<LoginApiResponse>> => {
   const { data } = await api.post("/auth/login", body);
 
   return data;
