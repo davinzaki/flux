@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { publicRoutes } from "./publicRoutes";
 import { authRoutes } from "./authRoutes";
+import { publicRoutes } from "./publicRoutes";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([

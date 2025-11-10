@@ -5,6 +5,7 @@ interface AuthContextType {
     user: User | null
     accessToken: string | null
     refreshToken: string | null
+    loading: boolean
     logout: () => void
     setAuth: (user: User, access: string, refresh: string) => void
 }

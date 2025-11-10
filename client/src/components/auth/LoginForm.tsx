@@ -4,19 +4,23 @@ import { Input } from "../ui/input"
 import { EyeIcon, EyeOffIcon, Loader2Icon, LockIcon, Mail } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useLogin } from "@/hooks/useAuth"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuthContext } from "@/context/AuthContext"
 import { toast } from "sonner"
 
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const { setAuth } = useAuthContext()
+  const navigate = useNavigate()
   const { mutate, isPending } = useLogin(
     {
       onSuccess: (res) => {
         const { accessToken, refreshToken, user } = res.data
         toast.success(`Welcome back, ${user.name}!`)
         setAuth(user, accessToken, refreshToken)
+
+        navigate('/products', { replace: true })
       },
       onError: (err) => {
         console.log('err', err)
@@ -33,7 +37,6 @@ const LoginForm = () => {
       password: ''
     },
   })
-  const { setAuth } = useAuthContext()
 
   const onSubmit = handleSubmit((data) => {
     console.log('onSubmit', data)
