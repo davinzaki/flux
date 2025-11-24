@@ -1,22 +1,25 @@
+import DashboardLayout from "@/components/layouts/DasboardLayout";
 import HomePage from "../pages/Home/HomePage";
 import ProductListPage from "../pages/Products/ProductListPage";
 import ProtectedRoute from "./ProtectedRoute";
 
 export const publicRoutes = [
   {
-    path: '/', element: (
-      <ProtectedRoute>
-        <HomePage />
-      </ProtectedRoute>
-    )
-  },
-  {
-    path: "/products", element: (
-      <ProtectedRoute>
-        <ProductListPage />
-      </ProtectedRoute>
-    )
-  },
-];
+    element: <DashboardLayout />, children: [
+      {
+        path: '/', element: (
+          <HomePage />
+        )
+      },
+      {
+        path: "/products", element: (
+          <ProtectedRoute>
+            <ProductListPage />
+          </ProtectedRoute>
+        )
+      },
+    ]
+  }
+]
 
 
