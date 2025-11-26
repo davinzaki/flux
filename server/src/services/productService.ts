@@ -131,7 +131,6 @@ export const findProductByIdService = async (id: string) => {
     .populate("category", "name slug")
     .lean({ virtuals: true });
 
-  console.log("product", product);
   if (!product) {
     throw new Error("Product not found");
   }

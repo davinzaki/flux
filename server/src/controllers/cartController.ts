@@ -1,0 +1,43 @@
+import { Request, Response } from "express";
+import { addToCartService, findCartService } from "../services/cartService";
+import { findProductByIdService } from "../services/productService";
+
+export const findCart = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(400).json({ message: "User ID is required" });
+      return;
+    }
+
+    const cart = await findCartService(userId);
+
+    res.status(200).send({
+      success: true,
+      message: "Successfully Get Cart",
+      data: cart,
+    });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+export const addToCart = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(400).json({ message: "User ID is required" });
+      return;
+    }
+
+    const cart = await addToCartService(req.body, userId);
+
+    res.status(201).send({
+      success: true,
+      message: "Successfully Add to Cart",
+      data: cart,
+    });
+  } catch (err: any) {}
+};
