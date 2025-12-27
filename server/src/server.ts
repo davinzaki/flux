@@ -8,6 +8,8 @@ import { ApiResponse } from "./types";
 import categoryRoutes from "./routes/categoryRoutes";
 import productRoutes from "./routes/productRoutes";
 import authRoutes from "./routes/authRoutes";
+import cartRoutes from "./routes/cartRoutes";
+
 import path from "path";
 import { cwd } from "process";
 import connectDB from "./config/db";
@@ -48,6 +50,7 @@ app.get("/api/test", (req: Request, res: Response<ApiResponse>) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
