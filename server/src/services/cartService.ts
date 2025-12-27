@@ -3,7 +3,7 @@ import { CreateCartDto, CreateCartItemDto } from "../validators/cartValidator";
 import { findProductByIdService } from "./productService";
 
 export const findCartService = async (userId: string) => {
-  let cart = await Cart.findOne({ userId: userId }).populate("items.product");
+  let cart = await Cart.findOne({ userId: userId }).populate("items.productId");
 
   if (!cart) {
     cart = await Cart.create({ userId: userId, items: [] });
@@ -16,30 +16,38 @@ export const addToCartService = async (
   body: CreateCartItemDto,
   userId: string
 ) => {
-  const { productId, qty } = body;
+  // const { productId, qty } = body;
+  const productId = body.productId;
+  const qty = Number(body.qty);
 
   const product = await findProductByIdService(productId);
 
-  let cart = await Cart.findOne({ userId })
+  let cart = await Cart.findOne({ userId });
 
   // new cart
-  if(!cart) {
-    cart = await Cart.create({ userId: userId, items: [{productId, qty}]})
-    return cart 
+  if (!cart) {
+    cart = await Cart.create({ userId: userId, items: [{ productId, qty }] });
+    return cart;
   }
 
+  const exist = cart.items.find(
+    (item) => item.productId.toString() === productId
+  );
 
-  
+  if (exist) {
+    exist.qty += qty;
+  } else {
+    cart.items.push({ productId, qty });
+  }
 
   await cart.save();
 
   return cart;
 };
 
-export const updateCartItemService = async (body: CreateCartDto, userId: string) => {
-
-}
+export const updateCartItemService = async (
+  body: CreateCartDto,
+  userId: string
+) => {};
 
 export const removeCartItemService = async () => {};
-
-

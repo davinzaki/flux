@@ -8,7 +8,6 @@ import { findProductByIdService } from "../services/productService";
 
 export const findCart = async (req: Request, res: Response) => {
   try {
-    console.log("req", req.user);
     const userId = req.user?.id;
 
     if (!userId) {
@@ -36,6 +35,8 @@ export const addToCart = async (req: Request, res: Response) => {
       res.status(400).json({ message: "User ID is required" });
       return;
     }
+
+    console.log("req.body", req.body);
 
     const cart = await addToCartService(req.body, userId);
 
