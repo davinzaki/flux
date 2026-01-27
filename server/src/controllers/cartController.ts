@@ -4,7 +4,7 @@ import {
   findCartService,
   updateCartItemService,
 } from "../services/cartService";
-import { findProductByIdService } from "../services/productService";
+import { CreateCartDto, CreateCartItemDto } from "../validators/cartValidator";
 
 export const findCart = async (req: Request, res: Response) => {
   try {
@@ -50,7 +50,10 @@ export const addToCart = async (req: Request, res: Response) => {
   }
 };
 
-export const updateCart = async (req: Request, res: Response) => {
+export const updateCart = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const userId = req.user?.id;
 
@@ -61,12 +64,22 @@ export const updateCart = async (req: Request, res: Response) => {
 
     const cart = await updateCartItemService(req.body, userId);
 
-    res.status(201).send({
+    res.status(200).send({
       success: true,
-      message: "Successfully Add to Cart",
+      message: "Successfully Update Cart",
       data: cart,
     });
   } catch (err: any) {
     res.status(400).json({ message: err.message });
   }
+  
 };
+
+export const removeCartItem = async (req: Request, res: Response) => {
+  try {
+    
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+
+  }
+}

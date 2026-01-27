@@ -14,7 +14,7 @@ export const findCartService = async (userId: string) => {
 
 export const addToCartService = async (
   body: CreateCartItemDto,
-  userId: string
+  userId: string,
 ) => {
   // const { productId, qty } = body;
   const productId = body.productId;
@@ -22,6 +22,10 @@ export const addToCartService = async (
 
   const product = await findProductByIdService(productId);
 
+  if (product.stock === 0) {
+    throw new Error('Product out of stock')
+  }
+ 
   let cart = await Cart.findOne({ userId });
 
   // new cart
@@ -31,7 +35,7 @@ export const addToCartService = async (
   }
 
   const exist = cart.items.find(
-    (item) => item.productId.toString() === productId
+    (item) => item.productId.toString() === productId,
   );
 
   if (exist) {
@@ -46,8 +50,49 @@ export const addToCartService = async (
 };
 
 export const updateCartItemService = async (
-  body: CreateCartDto,
-  userId: string
-) => {};
+  body: CreateCartItemDto,
+  userId: string,
+) => {
+  const productId = body.productId;
+  const qty = Number(body.qty);
+
+  const product = await findProductByIdService(productId)
+
+  if (product.stock === 0) {
+    throw new Error('Product out of stock')
+  }
+  
+  if (qty < 0) {
+    throw new Error("Qty can't negative");
+  }
+
+  const cart = await Cart.findOne({ userId });
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  const exist = cart.items.find(
+    (item) => item.productId.toString() === productId
+  );
+
+  if (!exist) {
+    throw new Error("Item not found in cart");
+  }
+
+  if (qty === 0) {
+    const idx = cart.items.indexOf(exist);
+    if (idx !== -1) {
+      cart.items.splice(idx, 1);
+    }
+  } else {
+    exist.qty = qty;
+  }
+
+  await cart.save();
+
+  return cart;
+}
 
 export const removeCartItemService = async () => {};
+
