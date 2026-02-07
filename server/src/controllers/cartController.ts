@@ -50,10 +50,7 @@ export const addToCart = async (req: Request, res: Response) => {
   }
 };
 
-export const updateCart = async (
-  req: Request,
-  res: Response,
-) => {
+export const updateCart = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
 
@@ -72,14 +69,4 @@ export const updateCart = async (
   } catch (err: any) {
     res.status(400).json({ message: err.message });
   }
-  
 };
-
-export const removeCartItem = async (req: Request, res: Response) => {
-  try {
-    
-  } catch (err: any) {
-    res.status(400).json({ message: err.message });
-
-  }
-}

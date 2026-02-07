@@ -23,9 +23,9 @@ export const addToCartService = async (
   const product = await findProductByIdService(productId);
 
   if (product.stock === 0) {
-    throw new Error('Product out of stock')
+    throw new Error("Product out of stock");
   }
- 
+
   let cart = await Cart.findOne({ userId });
 
   // new cart
@@ -56,12 +56,12 @@ export const updateCartItemService = async (
   const productId = body.productId;
   const qty = Number(body.qty);
 
-  const product = await findProductByIdService(productId)
+  const product = await findProductByIdService(productId);
 
   if (product.stock === 0) {
-    throw new Error('Product out of stock')
+    throw new Error("Product out of stock");
   }
-  
+
   if (qty < 0) {
     throw new Error("Qty can't negative");
   }
@@ -73,7 +73,7 @@ export const updateCartItemService = async (
   }
 
   const exist = cart.items.find(
-    (item) => item.productId.toString() === productId
+    (item) => item.productId.toString() === productId,
   );
 
   if (!exist) {
@@ -92,7 +92,4 @@ export const updateCartItemService = async (
   await cart.save();
 
   return cart;
-}
-
-export const removeCartItemService = async () => {};
-
+};
