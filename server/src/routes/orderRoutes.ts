@@ -4,3 +4,5 @@ import { verifyToken } from "../middleware/auth";
 const router = express.Router();
 
 router.post("/", verifyToken, checkout);
+
+export default router;

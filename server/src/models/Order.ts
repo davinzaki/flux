@@ -20,6 +20,7 @@ const orderSchema = new Schema(
       default: "pending",
     },
     paymentMethod: String,
+    externalId: String, // Store Xendit Invoice ID
   },
   { timestamps: true },
 );
