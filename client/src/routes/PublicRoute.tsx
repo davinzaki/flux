@@ -11,7 +11,7 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
 
     if (loading) return <div>Loading...</div>
 
-    if (user && accessToken) return <Navigate to='/' replace />
+    if (user && accessToken) return <Navigate to='/products' replace />
 
     return children
 }

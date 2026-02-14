@@ -74,7 +74,8 @@ export const checkout = async (userId: string) => {
         email: user.email,
         // mobileNumber: user.phone, // user model doesn't have phone yet
       },
-      failureRedirectUrl: `${process.env.CLIENT_URL}/payment/failed`,
+      successRedirectUrl: `${process.env.CLIENT_URL || "http://localhost:5173"}/payment/success?order_id=${order._id}`,
+      failureRedirectUrl: `${process.env.CLIENT_URL || "http://localhost:5173"}/payment/failed`,
     },
   });
 

@@ -9,3 +9,8 @@ export const addToCart = async (productId: string, qty: number) => {
   const { data } = await api.post("/cart", { productId, qty });
   return data;
 };
+
+export const updateCart = async (productId: string, qty: number) => {
+  const { data } = await api.put("/cart", { productId, qty });
+  return data;
+};

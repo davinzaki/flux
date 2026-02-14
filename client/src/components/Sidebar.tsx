@@ -1,5 +1,5 @@
 import { useAuthContext } from "@/context/AuthContext"
-import { HomeIcon, LogOutIcon, Package, ShoppingCart, SidebarClose, SidebarOpen } from "lucide-react"
+import { LogOutIcon, Package, ShoppingCart, SidebarClose, SidebarOpen } from "lucide-react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -50,13 +50,13 @@ const Sidebar = () => {
 
             {/* Navigation */}
             <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                <Link
+                {/* <Link
                     to="/"
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors"
                 >
                     <HomeIcon className="w-5 h-5 flex-shrink-0" />
                     {!isExpanded && <span>Home</span>}
-                </Link>
+                </Link> */}
 
                 <Link
                     to="/products"

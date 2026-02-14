@@ -1,6 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addToCart, getCart } from "../api/cart.api";
+import { addToCart, getCart, updateCart } from "../api/cart.api";
 import { toast } from "sonner";
+
+import { type AxiosError } from "axios";
+import { type ErrorResponseType } from "@/types/api";
 
 export const useGetCart = () => {
   return useQuery({
@@ -19,8 +22,24 @@ export const useAddToCart = () => {
       toast.success("Item added to cart");
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<ErrorResponseType>) => {
       toast.error(error.response?.data?.message || "Failed to add to cart");
+    },
+  });
+};
+
+export const useUpdateCart = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ productId, qty }: { productId: string; qty: number }) =>
+      updateCart(productId, qty),
+    onSuccess: () => {
+      toast.success("Cart updated");
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+    onError: (error: AxiosError<ErrorResponseType>) => {
+      toast.error(error.response?.data?.message || "Failed to update cart");
     },
   });
 };

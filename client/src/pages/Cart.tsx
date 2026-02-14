@@ -1,5 +1,5 @@
 import { checkout as checkoutApi } from "@/api/order.api";
-import { useGetCart } from "@/hooks/useCart";
+import { useGetCart, useUpdateCart } from "@/hooks/useCart";
 import { type ApiResponse } from "@/types/api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -7,10 +7,10 @@ import { toast } from "sonner";
 const Cart = () => {
   const checkoutMutation = useMutation({
     mutationFn: checkoutApi,
-    onSuccess: (data: ApiResponse<{ order: any; invoice: any }>) => {
-      // data.data is { order, invoice }
+    onSuccess: (data: ApiResponse<{ order: any; invoice?: any; paymentUrl?: string }>) => {
+      // data.data is { order, invoice } or { order, paymentUrl }
       // xendit invoice object usually has invoiceUrl or invoice_url (SDK uses camelCase usually)
-      const paymentUrl = data.data.invoice?.invoiceUrl || data.data.invoice?.invoice_url;
+      const paymentUrl = data.data.paymentUrl || data.data.invoice?.invoiceUrl || data.data.invoice?.invoice_url;
       
       console.log("Redirecting to:", paymentUrl);
       if (paymentUrl) {
@@ -26,6 +26,7 @@ const Cart = () => {
   });
 
   const { data: cartData, isLoading, isError } = useGetCart();
+  const { mutate: updateCart, isPending: isUpdating } = useUpdateCart();
   const { mutate: checkout, isPending } = checkoutMutation;
 
   if (isLoading) return <div>Loading cart...</div>;
@@ -44,18 +45,39 @@ const Cart = () => {
           <div>
             <ul className="mb-4">
               {cartItems.map((item: any) => (
-                <li key={item.productId._id} className="flex justify-between border-b py-2">
-                  <div>
-                    <h3 className="font-bold">{item.productId.name}</h3>
-                    <p>Qty: {item.qty} x {item.productId.price}</p>
+                <li key={item.productId._id} className="flex justify-between items-center border-b py-4">
+                  <div className="flex items-center gap-4">
+                    {item.productId.images?.[0] && (
+                        <img src={item.productId.images[0]} alt={item.productId.name} className="w-16 h-16 object-cover rounded" />
+                    )}
+                    <div>
+                        <h3 className="font-bold">{item.productId.name}</h3>
+                        <p className="text-gray-500">
+                            {item.productId.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}
+                        </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold">
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center border rounded">
+                        <button 
+                            disabled={isUpdating}
+                            onClick={() => updateCart({ productId: item.productId._id, qty: item.qty - 1 })}
+                            className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
+                        >-</button>
+                        <span className="px-3">{item.qty}</span>
+                        <button 
+                            disabled={isUpdating}
+                            onClick={() => updateCart({ productId: item.productId._id, qty: item.qty + 1 })}
+                            className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
+                        >+</button>
+                    </div>
+                    <div className="font-bold min-w-[100px] text-right">
                       {(item.productId.price * item.qty).toLocaleString("id-ID", {
                         style: "currency",
                         currency: "IDR",
                       })}
-                    </p>
+                    </div>
                   </div>
                 </li>
               ))}

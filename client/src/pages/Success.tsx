@@ -13,10 +13,10 @@ const Success: React.FC = () => {
           Thank you for your purchase. Your order ID is <span className="font-mono font-bold">{orderId}</span>.
         </p>
         <Link
-          to="/"
+          to="/products"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          Back to Home
+          Back to Products
         </Link>
       </div>
     </div>

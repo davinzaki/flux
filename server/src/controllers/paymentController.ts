@@ -16,15 +16,22 @@ export const xenditWebhook = async (req: Request, res: Response) => {
       return;
     }
 
+    console.log("Webhook Received:", JSON.stringify(req.body, null, 2));
+    console.log("Headers:", JSON.stringify(req.headers, null, 2));
+
     const { external_id, status } = req.body;
 
     // external_id is the orderId
     if (status === "PAID") {
+      console.log(`Searching for order with ID: ${external_id}`);
       const order = await Order.findById(external_id);
+      
       if (order) {
         order.status = "paid";
         await order.save();
         console.log(`Order ${external_id} marked as PAID`);
+      } else {
+        console.log(`Order ${external_id} NOT FOUND`);
       }
     } else if (status === "EXPIRED") {
       const order = await Order.findById(external_id);
@@ -32,6 +39,8 @@ export const xenditWebhook = async (req: Request, res: Response) => {
         order.status = "cancelled";
         await order.save();
         console.log(`Order ${external_id} marked as CANCELLED`);
+      } else {
+        console.log(`Order ${external_id} NOT FOUND`);
       }
     }
 

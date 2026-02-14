@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const { user, accessToken, loading } = useAuthContext()
-    console.log('user', user)
 
     if (loading) return <div>Loading...</div>
 
