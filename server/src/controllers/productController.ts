@@ -11,7 +11,6 @@ import Product from "../models/Product";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
     const product = await createProductService(
       req.body,
       req.files as Express.Multer.File[]

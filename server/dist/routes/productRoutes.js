@@ -1,0 +1,12 @@
+import express from "express";
+import { createProduct, deleteProduct, findProductBySlug, findProducts, updateProduct, } from "../controllers/productController";
+import { validate } from "../middleware/validate";
+import { upload, validateImageMagicNumber } from "../middleware/multer";
+import { createProductSchema, updateProductSchema, } from "../validators/productVaidator";
+const router = express.Router();
+router.get("/", findProducts);
+router.get("/:slug", findProductBySlug);
+router.post("/", upload.array("images", 5), validateImageMagicNumber, validate(createProductSchema), createProduct);
+router.put("/:id", upload.array("images", 5), validateImageMagicNumber, validate(updateProductSchema), updateProduct);
+router.delete("/:id", deleteProduct);
+export default router;

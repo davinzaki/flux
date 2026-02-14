@@ -8,4 +8,4 @@ export const productSchema = z.object({
   images: z.array(z.string()).optional(),
 });
 
-export type IProduct = z.infer<typeof productSchema>;
+export type Product = z.infer<typeof productSchema>;

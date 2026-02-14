@@ -1,0 +1,11 @@
+import express from "express";
+import { createCategory, deleteCategory, findCategories, findCategoryBySlug, updateCategory, } from "../controllers/categoryController";
+import { validate } from "../middleware/validate";
+import { createCategorySchema } from "../validators/categoryValidator";
+const router = express.Router();
+router.get("/", findCategories);
+router.post("/", validate(createCategorySchema), createCategory);
+router.get("/:slug", findCategoryBySlug);
+router.put("/:id", validate(createCategorySchema), updateCategory);
+router.delete("/:id", deleteCategory);
+export default router;
